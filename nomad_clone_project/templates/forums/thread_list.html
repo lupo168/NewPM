@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{{ category.name }} Threads - Nomad Site{% endblock %}
+{% block content %}
+<h2>{{ category.name }}</h2>
+<p><a href="{% url 'forums:category_list' %}">&laquo; Back to Categories</a></p>
+{% if user.is_authenticated %}
+  <p><a href="{% url 'forums:create_thread' category.slug %}">Start New Thread</a></p>
+{% else %}
+  <p><a href="{% url 'accounts:login' %}?next={{ request.path }}">Login to start a new thread.</a></p>
+{% endif %}
+{% if threads %}
+  <ul>
+    {% for thread in threads %}
+      <li>
+        <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+        <small>by {{ thread.author.username }} | Last activity: {{ thread.updated_at|timesince }} ago | {{ thread.posts.count }} replies</small>
+      </li>
+    {% empty %}
+      <p>No threads in this category yet. Be the first to start one!</p>
+    {% endfor %}
+  </ul>
+  {# Pagination for threads if implemented #}
+{% else %}
+  <p>No threads found in this category.</p>
+{% endif %}
+{% endblock %}

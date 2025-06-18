@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Cities - Nomad Site{% endblock %}
+
+{% block content %}
+  <h2>Explore Cities</h2>
+  {% if cities %}
+    <ul>
+      {% for city in cities %}
+        <li>
+          <a href="{{ city.get_absolute_url }}">
+            {{ city.name }}, {{ city.country }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        <span class="page-links">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+          <span class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+          </span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+          {% endif %}
+        </span>
+      </div>
+    {% endif %}
+  {% else %}
+    <p>No cities listed yet. Check back soon!</p>
+  {% endif %}
+  {% if user.is_staff %}
+    <p><a href="{% url 'admin:cities_city_add' %}">Add New City (Admin)</a></p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - Nomad Site{% endblock %}
+
+{% block content %}
+  <h2>{{ title }}: {{ user.username }}</h2>
+  <p>Email: {{ user.email }}</p>
+  <p>Bio: {{ user.profile.bio|default:'No bio set.' }}</p>
+  {% if user.profile.avatar %}
+    <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s avatar" style="max-width: 150px;"> {# Ensure quotes are escaped #}
+  {% else %}
+    <p>No avatar set.</p>
+  {% endif %}
+  {# Add link to edit profile later #}
+{% endblock %}

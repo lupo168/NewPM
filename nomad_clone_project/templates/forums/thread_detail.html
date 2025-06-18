@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - Nomad Site{% endblock %}
+{% block content %}
+  <h3><a href="{% url 'forums:category_threads' thread.category.slug %}">{{ thread.category.name }}</a> &raquo; {{ thread.title }}</h3>
+  <p>Started by: {{ thread.author.username }} on {{ thread.created_at|date:"Y-m-d H:i" }}</p>
+
+  <div class="thread-initial-post" style="border: 1px solid #eee; padding:10px; margin-bottom:15px;">
+    {{ thread.initial_content|linebreaksbr }}
+  </div>
+
+  <h4>Replies ({{ posts.count }})</h4>
+  {% for post in posts %}
+    <div id="post-{{ post.id }}" style="border-top: 1px solid #ddd; padding: 10px 0;">
+      <p><strong>{{ post.author.username }}</strong> replied on {{ post.created_at|date:"Y-m-d H:i" }}:</p>
+      <div>{{ post.content|linebreaksbr }}</div>
+    </div>
+  {% empty %}
+    <p>No replies yet.</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+    <h4>Post a Reply</h4>
+    <form method="post"> {# Action defaults to current URL, which is fine if view handles it #}
+        {% csrf_token %}
+        {{ post_form.as_p }}
+        <button type="submit">Submit Reply</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'accounts:login' %}?next={{ request.path }}">Login</a> to post a reply.</p>
+  {% endif %}
+{% endblock %}

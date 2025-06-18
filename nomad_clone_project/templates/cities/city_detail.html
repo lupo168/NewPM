@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ city.name }} - Nomad Site{% endblock %}
+
+{% block content %}
+  <h2>{{ city.name }}, {{ city.country }}</h2>
+
+  {% if city.hero_image %}
+    <img src="{{ city.hero_image.url }}" alt="{{ city.name }}" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+  {% endif %}
+
+  <p><strong>Description:</strong></p>
+  <div>{{ city.description|linebreaksbr|default:"No description available." }}</div>
+
+  {% if city.key_facts %}
+    <p><strong>Key Facts:</strong></p>
+    <div>{{ city.key_facts|linebreaksbr }}</div>
+  {% endif %}
+
+  <p><small>Last updated: {{ city.updated_at|date:"Y-m-d" }}</small></p>
+
+  {% if user.is_staff %}
+    <p><a href="{% url 'admin:cities_city_change' city.id %}">Edit City (Admin)</a></p>
+  {% endif %}
+  <p><a href="{% url 'cities:city_list' %}">Back to all cities</a></p>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Forums - Nomad Site{% endblock %}
+{% block content %}
+<h2>Forum Categories</h2>
+{% if categories %}
+  <ul>
+    {% for category in categories %}
+      <li>
+        <h3><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></h3>
+        <p>{{ category.description|default:"No description." }}</p>
+        <small>{{ category.threads.count }} threads</small>
+      </li>
+    {% empty %}
+      <p>No forum categories created yet.</p>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No forum categories available.</p>
+{% endif %}
+{% if user.is_staff %} <p><a href="{% url 'admin:forums_forumcategory_add' %}">Add Category (Admin)</a></p> {% endif %}
+{% endblock %}
